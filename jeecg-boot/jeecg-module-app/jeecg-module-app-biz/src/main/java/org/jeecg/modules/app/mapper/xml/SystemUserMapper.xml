@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.SystemUserMapper">
+    <!-- 通过phone查询用户信息 -->
+    <select id="queryByPhone" resultType="org.jeecg.modules.app.entity.SystemUser">
+        select * from courses_systemuser where phone=#{phone}
+    </select>
+
+    <!-- 通过昵称查找用户 -->
+    <select id="queryByName" resultType="java.lang.String">
+        select id from courses_systemuser where name = #{name}
+    </select>
+
+    <!-- 插入用户信息 -->
+    <insert id="userRegister" parameterType="org.jeecg.modules.app.entity.SystemUser">
+        insert into courses_systemuser (user_id,phone,create_time,password)
+        values(#{userId},#{phone},now(),#{password})
+    </insert>
+
+    <!-- 修改用户密码 -->
+    <update id="modifyPassword" parameterType="string">
+	UPDATE courses_systemuser SET
+	password = #{newPassword} WHERE phone = #{phone} and password = #{password}
+    </update>
+
+    <!-- 设置用户密码 -->
+    <update id="setPassword" parameterType="string">
+	UPDATE courses_systemuser SET
+	password = #{newPassword} WHERE phone = #{phone}
+    </update>
+
+    <!-- 修改头像 -->
+    <update id="alterAvatar">
+        UPDATE  courses_systemuser SET avatar = #{avatar} WHERE user_id = #{userId}
+    </update>
+
+    <!-- 修改昵称 -->
+    <update id="alterName">
+        UPDATE  courses_systemuser SET name = #{name} WHERE user_id = #{userId}
+    </update>
+
+    <!-- 修改手机号 -->
+    <update id="alterPhoneNumber">
+        UPDATE courses_systemuser SET phone = #{phone} WHERE user_id = #{userId}
+    </update>
+
+</mapper>

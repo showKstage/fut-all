@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.CoursesSeriesMapper">
+    <!--系列课程查询-->
+    <select id="querySeriesCourses" resultType="org.jeecg.modules.app.vo.CoursesSeriesVo">
+        SELECT id, courses_series_name as coursesSeriesName, courses_series_picture as coursesSeriesPicture,
+        courses_series_price as price,courses_series_introduce as coursesSeriesIntroduce
+        FROM courses_series
+    </select>
+
+    <!--系列课程学习人数统计-->
+    <select id="querySeriesCoursesLearningNum" resultType="java.lang.Integer">
+        SELECT count(user_id) as num,courses_series_id FROM courses_user,courses_detail
+        WHERE courses_detail_id = courses_detail.id AND courses_series_id=#{coursesSeriesId}
+    </select>
+
+    <!--通过id查询系列课程基本信息-->
+    <select id="querySeriesCoursesById" resultType="org.jeecg.modules.app.vo.CoursesSeriesVo">
+        SELECT id, courses_series_name as coursesSeriesName, courses_series_picture as coursesSeriesPicture,
+        courses_series_price as price,courses_series_introduce as coursesSeriesIntroduce
+        FROM courses_series
+        WHERE id=#{coursesSeriesId}
+    </select>
+
+   </mapper>

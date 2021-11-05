@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.CoursesCouponHistoryMapper">
+
+    <!--使用优惠卷-->
+    <update id="useCoursesCoupon">
+        update courses_coupon_history set use_status=1,use_time=#{useTime}
+        where coupon_id=#{couponId} AND user_id=#{userId}
+    </update>
+
+    <!--设置过期优惠卷状态-->
+    <update id="setCoursesCoupon">
+        update courses_coupon_history set use_status=2 where coupon_id=#{couponId}
+    </update>
+
+    <!-- 退回优惠券 -->
+    <update id="recallCoursesCoupon">
+       update courses_coupon_history set use_status = 0,use_time = null
+        where coupon_id = #{couponId} AND user_id = #{userId}
+    </update>
+
+</mapper>

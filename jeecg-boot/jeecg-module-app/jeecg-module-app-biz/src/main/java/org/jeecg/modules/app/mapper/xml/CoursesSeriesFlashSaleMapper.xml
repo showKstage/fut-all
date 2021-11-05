@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.CoursesSeriesFlashSaleMapper">
+
+    <!--根据系列课程id查询-->
+    <select id="queryCourseSaleByCourseSeriesId" resultType="org.jeecg.modules.app.entity.CoursesSeriesFlashSale">
+        SELECT *
+		FROM courses_series_flash_sale
+		WHERE course_series_id = #{courseSeriesId}
+    </select>
+</mapper>

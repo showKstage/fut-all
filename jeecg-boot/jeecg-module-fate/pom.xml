@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jeecg-boot-parent</artifactId>
+        <groupId>org.jeecgframework.boot</groupId>
+        <version>2.4.6</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>jeecg-module-fate</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <!--项目子模块-->
+    <modules>
+        <module>jeecg-module-fate-api</module>
+        <module>jeecg-module-fate-biz</module>
+        <module>jeecg-module-fate-start</module>
+    </modules>
+
+</project>
+
