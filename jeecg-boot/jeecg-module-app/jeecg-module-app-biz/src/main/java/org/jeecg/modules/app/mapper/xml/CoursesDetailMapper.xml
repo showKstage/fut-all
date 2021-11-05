@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.CoursesDetailMapper">
+
+	<!--修改课程收藏信息-->
+	<update id="setSlideShow">
+		UPDATE courses_image SET url=#{url} WHERE courses_id=#{coursesId}
+	</update>
+
+	<delete id="deleteByMainId" parameterType="java.lang.String">
+		DELETE
+		FROM  courses_detail
+		WHERE
+			 courses_series_id = #{mainId}
+	</delete>
+
+	<select id="selectByMainId" parameterType="java.lang.String" resultType="org.jeecg.modules.app.entity.CoursesDetail">
+		SELECT *
+		FROM  courses_detail
+		WHERE
+			 courses_series_id = #{mainId}
+	</select>
+
+	<!-- 根据教师id查询付费课程 -->
+	<select id="queryPayCoursesByTeacherId" parameterType="string" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+		SELECT cd.id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price,
+		(SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+		FROM
+		(SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price FROM courses_detail
+		WHERE teacher_id = #{teacherId} and courses_detail_price != 0) AS cd
+	</select>
+
+	<!-- 根据教师id查询免费课程 -->
+	<select id="queryFreeCoursesByTeacherId" parameterType="string" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+		SELECT cd.id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price,
+		(SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+		FROM
+		(SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price FROM courses_detail
+		WHERE teacher_id = #{teacherId} and courses_detail_price = 0) AS cd
+	</select>
+
+	<!-- 查询课程介绍信息-->
+    <select id="queryCoursesDetail" resultType="org.jeecg.modules.app.vo.CoursesDetailIntroductionVo">
+		SELECT courses_detail_name as coursesDetailName ,courses_detail_picture as coursesDetailPicture,courses_detail_introduce as coursesDetailIntroduce,courses_detail_price as coursesDetailPrice,courses_detail_level as coursesDetailLevel,
+       courses_detail_score as coursesDetailScore ,teacher_id as teacherId ,teacher_name as teacherName,fans as fans,(SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+		FROM courses_detail as cd,courses_teacher as ct
+		WHERE cd.teacher_id=ct.id AND cd.id=#{coursesDetailId}
+	</select>
+
+	<!-- 查询推荐课程信息-->
+	<select id="queryRecommendCourses" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+		SELECT dc.id AS courseId, dc.courses_detail_name AS courseName, dc.courses_detail_picture AS coursePicture, dc.courses_detail_price AS price,
+       (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = dc.id) AS learningNum
+		FROM
+     	(SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price,courses_series_id
+      	 FROM courses_detail WHERE id=#{coursesDetailId} ) AS cd,
+       (SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price,courses_series_id
+        FROM courses_detail) AS dc
+        WHERE dc.courses_series_id=cd.courses_series_id AND  dc.id not in (#{coursesDetailId})
+        GROUP BY courseId, courseName, coursePicture, price ORDER BY learningNum DESC
+	</select>
+
+	<!--删除课程收藏信息-->
+	<delete id="deleteCoursesCollect">
+		DELETE FROM courses_collect WHERE user_id=#{userId} and courses_detail_id=#{coursesDetailId}
+	</delete>
+
+	<!--删除最近学习课程-->
+    <delete id="deleteUserCoursesRecently">
+		DELETE FROM courses_user_recent WHERE courses_detail_id in
+		(<foreach collection="coursesIds" item="id"  separator=",">#{id}</foreach>) AND user_id=#{userId}
+	</delete>
+
+	<!--删除课程收藏信息-->
+	<delete id="deleteSlideShow">
+		DELETE FROM courses_image WHERE courses_id=#{coursesId}
+	</delete>
+
+    <!--查询课程收藏信息-->
+	<select id="queryCoursesCollect" resultType="java.lang.String">
+		SELECT id FROM courses_collect WHERE user_id=#{userId} and courses_detail_id=#{coursesDetailId}
+	</select>
+
+	<!--添加课程收藏信息-->
+	<insert id="addCoursesCollect">
+		INSERT INTO courses_collect(id,user_id,courses_detail_id) VALUES (#{id},#{userId},#{coursesDetailId})
+	</insert>
+
+	<!--添加课程-->
+	<insert id="addCourse">
+		INSERT INTO courses_detail(id,teacher_id,courses_detail_name,courses_detail_picture,courses_detail_price,courses_detail_introduce,courses_detail_createtime)
+		VALUES (#{courseId},#{teacherId},#{courseName},#{coursePicture},#{price},#{coursesDetailIntroduce},#{coursesDetailCreateTime})
+	</insert>
+
+	<!--评论课程-->
+	<insert id="commentCourse">
+		INSERT INTO courses_comment(id,courses_detail_id,user_id,comment_content,comment_time,comment_level)
+		VALUES (#{id},#{coursesDetailId},#{userId},#{commentContent},#{commentTime},#{commentLevel})
+	</insert>
+
+	<!--添加首页课程轮播图-->
+	<insert id="addSlideShow">
+		INSERT INTO courses_image(courses_id,url)VALUES (#{coursesId},#{url})
+	</insert>
+
+	<!--根据课程名查询课程-->
+	<select id="queryCourseByCourseName" resultType="java.lang.String">
+		SELECT courses_detail_name FROM courses_detail WHERE courses_detail_name=#{courseName}
+	</select>
+
+	<!--获取课程视频个数-->
+	<select id="queryVideosNum" resultType="java.lang.Integer">
+		select count(id) videosNum from courses_catalogue where courses_detail_id=#{coursesDetailId} and parent_id IS NOT NULL
+	</select>
+
+	<!--获取课程视频观看个数-->
+	<select id="queryWatchNum" resultType="java.lang.Integer">
+		select count(id) watchedNum from courses_user where user_id=#{userId} and courses_detail_id =#{coursesDetailId};
+	</select>
+
+	<!--获取我收藏的课程-->
+    <select id="getUserCoursesCollect" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+		SELECT id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price,
+        (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+        FROM
+            (SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price
+             FROM courses_detail) AS cd
+        WHERE  id IN (SELECT courses_detail_id FROM courses_collect WHERE user_id=#{userId})
+        GROUP BY courseId, courseName, coursePicture, price
+	</select>
+
+	<!--获取我的免费课程-->
+	<select id="getUserCoursesFree" resultType="org.jeecg.modules.app.vo.CourseUserVo">
+		SELECT id, courses_detail_name, courses_detail_picture
+    	FROM courses_detail
+    	WHERE courses_detail_price = 0 AND id in(SELECT courses_detail_id FROM courses_user WHERE user_id=#{userId})
+	</select>
+
+	<!--获取我的收费课程-->
+	<select id="getUserCoursesPaid" resultType="org.jeecg.modules.app.vo.CourseUserVo">
+		SELECT id AS courseId, courses_detail_name, courses_detail_picture
+    	FROM courses_detail
+    	WHERE courses_detail_price > 0 AND id in(SELECT courses_detail_id FROM courses_user WHERE user_id=#{userId})
+	</select>
+
+	<!--获取我的最近学习课程-->
+	<select id="getUserCoursesRecently" resultType="org.jeecg.modules.app.vo.CourseUserVo">
+		SELECT id AS courseId, courses_detail_name, courses_detail_picture
+    	FROM courses_detail
+    	WHERE id in(SELECT courses_detail_id FROM courses_user_recent WHERE user_id=#{userId} ORDER BY create_time)
+	</select>
+
+	<!--获取首页课程轮播图-->
+	<select id="getSlideShow" resultType="org.jeecg.modules.app.vo.CourseSlidesShow">
+		SELECT courses_id,url FROM courses_image
+	</select>
+
+	<!-- 根据课程id查询课程分类id -->
+    <select id="getCoursesCategoryIdByCoursesId" resultType="java.lang.String">
+		SELECT category_id FROM courses_category_course
+		WHERE course_id = #{coursesId}
+	</select>
+
+
+</mapper>

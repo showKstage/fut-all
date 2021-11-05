@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.CoursesLabelMapper">
+    <!--删除用户已有标签-->
+    <delete id="deleteUerCourseLabel">
+        delete from courses_category_user where user_id = #{userId}
+    </delete>
+
+    <select id="queryLabel" parameterType="string" resultType="java.lang.String">
+        select id from courses_category
+        where category_name = #{categoryName}
+    </select>
+
+    <insert id="addLabel" parameterType="java.lang.String">
+        insert into courses_category_user (category_id, user_id)
+        values  (#{categoryId},#{userId})
+    </insert>
+
+    <!--绑定课程标签-->
+    <insert id="bindCourseLabel">
+        insert into courses_label_course(id,label_id,course_id)values (#{id},#{labelId},#{courseId})
+    </insert>
+
+    <!--绑定课程分类-->
+    <insert id="bindCourseCategory">
+        insert into courses_category_course(id,category_id,course_id)values (#{id},#{categoryId},#{courseId})
+    </insert>
+
+    <!--添加课程标签-->
+    <insert id="addCourseLabel">
+        insert into courses_label(id,label_name)values (#{id},#{courseLabelName})
+    </insert>
+
+    <select id="queryCoursesCategory" parameterType="string" resultType="java.lang.String">
+    SELECT category_name FROM courses_category
+    WHERE 1=1 and parent_id in
+    (SELECT id as parent_id FROM courses_category WHERE category_name = #{categoryName})
+    </select>
+
+    <!--获取课程标签-->
+    <select id="getAllCourseLabel" resultType="org.jeecg.modules.app.vo.CourseLabelVo">
+        select id as courseLabelId,label_name as courseLabelName from courses_label
+    </select>
+
+    <!--根据名称获取课程标签-->
+    <select id="queryCourseLabel" resultType="java.lang.String">
+        select id from courses_label where label_name=#{courseLabelName}
+    </select>
+
+    <!--查询用户已有标签-->
+    <select id="queryUserLabel" resultType="java.lang.String">
+        SELECT id FROM courses_category_user WHERE category_id= #{categoryId} AND user_id=#{userId}
+    </select>
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.SearchMapper">
+
+    <!--根据课程名查询课程基本信息-->
+    <select id="queryCoursesVoByName" parameterType="java.lang.String" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+        SELECT cd.id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price,
+        (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+        FROM
+            (SELECT id, courses_detail_name, courses_detail_picture, courses_detail_price
+             FROM courses_detail WHERE courses_detail_name LIKE #{coursesDetailName})AS cd
+            INNER JOIN courses_user AS cu
+            ON 1=1
+        GROUP BY courseId, courseName, coursePicture, price
+    </select>
+
+
+    <!--根据文章标题查询文章基本信息-->
+    <select id="queryArticleVoByTitle" parameterType="java.lang.String" resultType="org.jeecg.modules.app.vo.CoursesArticleDetailVo">
+        SELECT cd.id AS articleId, article_title AS articleTitle, article_picture AS articlePicture, teacher_name AS teacherName
+        FROM courses_teacher AS ct
+        INNER JOIN courses_article_detail AS cd
+        ON cd.article_title LIKE #{articleTitle} AND ct.id = cd.teacher_id
+    </select>
+
+    <!--根据课程id查询课程标签-->
+    <select id="queryLabelNameByCourseId" parameterType="string" resultType="string">
+        SELECT label_name
+        FROM courses_label
+        WHERE id IN (SELECT label_id FROM courses_label_course WHERE course_id = #{courseId})
+    </select>
+    <!--根据课程id查询课程类别-->
+    <select id="queryCategoryNameByCourseId" parameterType="string" resultType="string">
+        SELECT category_name
+        FROM courses_category
+        WHERE id IN (SELECT category_id FROM courses_category_course WHERE course_id = #{courseId})
+    </select>
+
+    <!--根据文章id查询文章标签-->
+    <select id="queryLabelNameByArticleId" parameterType="string" resultType="java.lang.String">
+        SELECT label_name
+        FROM courses_label
+        WHERE id IN (SELECT label_id FROM courses_label_article WHERE article_id = #{articleId})
+    </select>
+    <!--根据文章id查询文章类别-->
+    <select id="queryTypeNameByArticleId" parameterType="string" resultType="string">
+        SELECT article_type
+        FROM courses_article_type
+        WHERE id = (SELECT article_type_id FROM courses_article_detail WHERE id = #{articleId})
+    </select>
+
+    <!--搜索热门好课（Top15）-->
+    <select id="getHotCourses" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+        SELECT id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price,
+        (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+        FROM
+            (SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price
+             FROM courses_detail) AS cd
+        GROUP BY courseId, courseName, coursePicture, price ORDER BY learningNum DESC
+        LIMIT 15
+    </select>
+
+    <!--查询免费课程-->
+    <select id="queryFreeCourses" parameterType="string" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+        SELECT cd.id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price, courses_detail_createtime AS createtime,
+        (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+        FROM
+            (SELECT id, courses_detail_name, courses_detail_picture, courses_detail_price, courses_detail_createtime
+             FROM courses_detail WHERE courses_detail_price = 0 ) AS cd
+            INNER JOIN courses_user AS cu
+            ON 1=1
+        GROUP BY courseId, courseName, coursePicture, price, createtime
+        <!--按时间排-->
+        <if test="orderBy == '0' " >
+            ORDER BY createtime DESC
+        </if>
+        <!--按热度排-->
+        <if test="orderBy == '1' ">
+            ORDER BY learningNum DESC
+        </if>
+    </select>
+
+    <!--查询限时优惠课程-->
+    <select id="queryFlashSaleCourses" parameterType="string" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+        SELECT cd.id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price, courses_detail_createtime AS createtime,
+        (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+        FROM
+        (SELECT id, courses_detail_name, courses_detail_picture, courses_detail_price, courses_detail_createtime
+        FROM courses_detail WHERE id IN (SELECT course_id FROM courses_flash_sale)) AS cd
+        INNER JOIN courses_user AS cu
+        ON 1=1
+        GROUP BY courseId, courseName, coursePicture, price, createtime
+        <!--按时间排-->
+        <if test="orderBy == '0' " >
+            ORDER BY createtime DESC
+        </if>
+        <!--按热度排-->
+        <if test="orderBy == '1' ">
+            ORDER BY learningNum DESC
+        </if>
+        <if test="limit != 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!--查询精品课程（Top15）按评分-->
+    <select id="queryExcellentCourses" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+        SELECT cd.id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price, courses_detail_score AS score,
+        (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+        FROM
+            (SELECT id, courses_detail_name, courses_detail_picture, courses_detail_price, courses_detail_score
+             FROM courses_detail) AS cd
+            INNER JOIN courses_user AS cu
+            ON 1=1
+        GROUP BY courseId, courseName, coursePicture, price, score ORDER BY score DESC
+        LIMIT 15
+    </select>
+
+
+    <!--分类查询文章基本信息-->
+    <select id="queryArticleByType" resultType="org.jeecg.modules.app.vo.CoursesArticleDetailVo">
+        SELECT cd.id AS articleId, article_title AS articleTitle, article_picture AS articlePicture, teacher_name AS teacherName
+        FROM courses_teacher AS ct
+        INNER JOIN courses_article_detail AS cd
+        ON  ct.id = cd.teacher_id
+        <if test="type=='精选好文'">
+            AND cd.article_type_id = '1'
+        </if>
+        <if test="type=='经验分享'">
+            AND cd.article_type_id = '2'
+        </if>
+        <if test="type=='技术精进'">
+            AND cd.article_type_id = '3'
+        </if>
+        <if test="type=='行业观察'">
+            AND cd.article_type_id = '4'
+        </if>
+        <if test="limit != 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!--查询系列课程详情-->
+    <select id="querySeriesCoursesDetail" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+         SELECT id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price,
+        (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+        FROM
+            (SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price,courses_series_id
+             FROM courses_detail) AS cd
+        WHERE courses_series_id=#{coursesSeriesId}
+        GROUP BY courseId, courseName, coursePicture, price
+    </select>
+
+    <!--获取推荐课程分类-->
+    <select id="queryCoursesDetailRecommendCategory" resultType="org.jeecg.modules.app.vo.CoursesDetailCategoryVo">
+        SELECT cc.id,cc.category_name FROM courses_category as cc,courses_category_user as ccu WHERE
+        cc.id=ccu.category_id and ccu.user_id=#{userId}
+    </select>
+
+    <!--根据分类查询课程-->
+    <select id="queryCoursesDetailByCategory" resultType="org.jeecg.modules.app.vo.CoursesDetailVo">
+          SELECT cd.id AS courseId, courses_detail_name AS courseName, courses_detail_picture AS coursePicture, courses_detail_price AS price,
+            (SELECT count(user_id) FROM courses_user WHERE courses_detail_id = cd.id) AS learningNum
+          FROM
+            (SELECT id, courses_detail_name, courses_detail_picture,courses_detail_price
+             FROM courses_detail) AS cd
+          WHERE cd.id in (SELECT course_id FROM courses_category_course WHERE category_id=#{categoryId} )
+        <if test="limit != 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!--获取所有课程分类-->
+    <select id="queryCoursesCategory" resultType="org.jeecg.modules.app.vo.CoursesCategoryVo">
+        SELECT * FROM courses_category
+    </select>
+</mapper>

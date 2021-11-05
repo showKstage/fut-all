@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.app.mapper.CoursesCatalogueMapper">
+
+	<delete id="deleteByMainId" parameterType="java.lang.String">
+		DELETE 
+		FROM  courses_catalogue 
+		WHERE
+			 courses_detail_id = #{mainId}
+	</delete>
+	
+	<select id="selectByMainId" parameterType="java.lang.String" resultType="org.jeecg.modules.app.entity.CoursesCatalogue">
+		SELECT * 
+		FROM  courses_catalogue
+		WHERE
+			 courses_detail_id = #{mainId}
+	</select>
+
+	<select id="selectById" parameterType="java.lang.String" resultType="org.jeecg.modules.app.entity.CoursesCatalogue">
+		SELECT *
+		FROM  courses_catalogue
+		WHERE
+			 id = #{id}
+	</select>
+
+	<update id="updateVodIdToNullById" parameterType="string">
+		UPDATE courses_catalogue SET vod_id = ''
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateVodIdById" parameterType="string">
+		UPDATE courses_catalogue SET vod_id = #{vodId}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

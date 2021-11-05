@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jeecg-boot-parent</artifactId>
+        <groupId>org.jeecgframework.boot</groupId>
+        <version>2.4.6</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>jeecg-module-app</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <!--项目子模块-->
+    <modules>
+        <module>jeecg-module-app-api</module>
+        <module>jeecg-module-app-biz</module>
+        <module>jeecg-module-app-start</module>
+    </modules>
+    <!-- 环境 有需要时打开 -->
+<!--    <profiles>-->
+<!--        &lt;!&ndash; 开发 &ndash;&gt;-->
+<!--        <profile>-->
+<!--            <id>dev</id>-->
+<!--            <activation>-->
+<!--                &lt;!&ndash;默认激活配置&ndash;&gt;-->
+<!--                <activeByDefault>true</activeByDefault>-->
+<!--            </activation>-->
+<!--            <properties>-->
+<!--                &lt;!&ndash;当前环境&ndash;&gt;-->
+<!--                <profile.name>dev</profile.name>-->
+<!--                &lt;!&ndash;配置文件前缀&ndash;&gt;-->
+<!--                <prefix.name>app</prefix.name>-->
+<!--                &lt;!&ndash;Nacos配置中心地址&ndash;&gt;-->
+<!--                <config.server-addr>interview-nacos.aift.ftwhale.com:8082</config.server-addr>-->
+<!--                &lt;!&ndash;Nacos配置中心命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空&ndash;&gt;-->
+<!--                <config.namespace/>-->
+<!--                &lt;!&ndash;Nacos配置分组名称&ndash;&gt;-->
+<!--                <config.group>DEFAULT_GROUP</config.group>-->
+<!--                &lt;!&ndash;Nacos服务发现地址&ndash;&gt;-->
+<!--                <discovery.server-addr>interview-nacos.aift.ftwhale.com:8082</discovery.server-addr>-->
+<!--            </properties>-->
+<!--        </profile>-->
+<!--        &lt;!&ndash; 测试 &ndash;&gt;-->
+<!--        <profile>-->
+<!--            <id>test</id>-->
+<!--            <properties>-->
+<!--                &lt;!&ndash;当前环境&ndash;&gt;-->
+<!--                <profile.name>test</profile.name>-->
+<!--                &lt;!&ndash;配置文件前缀&ndash;&gt;-->
+<!--                <prefix.name>app</prefix.name>-->
+<!--                &lt;!&ndash;Nacos配置中心地址&ndash;&gt;-->
+<!--                <config.server-addr>127.0.0.1:8848</config.server-addr>-->
+<!--                &lt;!&ndash;Nacos配置中心命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空&ndash;&gt;-->
+<!--                <config.namespace/>-->
+<!--                &lt;!&ndash;Nacos配置分组名称&ndash;&gt;-->
+<!--                <config.group>DEFAULT_GROUP</config.group>-->
+<!--                &lt;!&ndash;Nacos服务发现地址&ndash;&gt;-->
+<!--                <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>-->
+<!--            </properties>-->
+<!--        </profile>-->
+<!--        &lt;!&ndash; 生产 &ndash;&gt;-->
+<!--        <profile>-->
+<!--            <id>prod</id>-->
+<!--            <properties>-->
+<!--                &lt;!&ndash;当前环境,生产环境为空&ndash;&gt;-->
+<!--                <profile.name>prod</profile.name>-->
+<!--                &lt;!&ndash;配置文件前缀&ndash;&gt;-->
+<!--                <prefix.name>app</prefix.name>-->
+<!--                &lt;!&ndash;Nacos配置中心地址&ndash;&gt;-->
+<!--                <config.server-addr>jeecg-cloud-nacos.interview.svc.cluster.local:8848</config.server-addr>-->
+<!--                &lt;!&ndash;Nacos配置中心命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空&ndash;&gt;-->
+<!--                <config.namespace/>-->
+<!--                &lt;!&ndash;Nacos配置分组名称&ndash;&gt;-->
+<!--                <config.group>DEFAULT_GROUP</config.group>-->
+<!--                &lt;!&ndash;Nacos服务发现地址&ndash;&gt;-->
+<!--                <discovery.server-addr>jeecg-cloud-nacos.interview.svc.cluster.local:8848</discovery.server-addr>-->
+<!--            </properties>-->
+<!--        </profile>-->
+<!--    </profiles>-->
+
+</project>
+
