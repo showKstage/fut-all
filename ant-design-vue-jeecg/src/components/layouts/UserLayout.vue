@@ -8,7 +8,7 @@
           </a>
         </div>
         <div class="desc">
-          欢迎进入 FUT 一站式联邦营销平台
+          欢迎进入我们的平台
         </div>
       </div>
 
@@ -16,7 +16,7 @@
 
       <div class="footer">
         <div class="copyright">
-          Copyright &copy; 2021 <a href="http://interview-cloud-web.aift.ftwhale.com:8082/user/login" target="_blank">AIFT PLATFORM</a> 出品
+          Copyright &copy; 2021 <a href="http://interview-cloud-web.aift.ftwhale.com:8082/user/login" target="_blank">WE</a> 出品
         </div>
       </div>
     </div>
