@@ -37,4 +37,57 @@
 	   order by create_time DESC
 	</select>
 
+	<!-- 根据id查询企业合作计划信息 -->
+	<select id="selectCooperationById" resultType="org.jeecg.modules.system.entity.FateCooperation">
+		SELECT id , plan_name , cooperation , marketing_system , algorithm_selection , trading_straregy
+		FROM fate_cooperation
+		WHERE id = #{id}
+	</select>
+
+	<!-- 根据id查询企业合作通告数据 -->
+	<select id="selectSysAnnouncementById" resultType="org.jeecg.modules.system.entity.SysAnnouncement">
+		SELECT * FROM sys_announcement
+		WHERE id = #{id}
+	</select>
+
+	<!-- 根据id查询企业合作sender的id -->
+	<select id="selectSenderIdById" resultType="string">
+		SELECT b.id
+		FROM sys_announcement AS a , sys_user AS b
+		WHERE a.id = #{id} AND b.username = a.create_by
+	</select>
+	
+	<!-- 插入fate_project信息 -->
+	<insert id="insertFateProject">
+		INSERT INTO fate_project (id,firm , strategy , third_party,status,process,plan_name)
+		VALUES (#{fateCooperation.id},#{fateCooperation.cooperation},#{fateCooperation.tradingStraregy},#{fateCooperation.marketingSystem},'未执行',#{fateCooperation.algorithmSelection},#{fateCooperation.planName})
+	</insert>
+
+	<!-- 查询fate_cooperation表的agree_count值 -->
+	<select id="selectAgreeCountById" resultType="string">
+		SELECT agree_count
+		FROM fate_cooperation
+		WHERE id = #{fateCooperation.id}
+	</select>
+
+	<!-- 插入fate_run_project信息 -->
+	<insert id="insertRunProject">
+		INSERT INTO fate_run_project (id , fate_project_id , plan_name )
+		VALUES (#{id},#{fateCooperation.id},#{fateCooperation.planName})
+	</insert>
+
+	<!-- 减少fate_cooperation表的agree_count值 -->
+	<select id="updateAgreeCount">
+		UPDATE fate_cooperation
+		SET agree_count = agree_count - 1
+		WHERE id = #{fateCooperation.id}
+	</select>
+
+	<!-- 修改status状态为执行中 -->
+	<update id="updateRunningStatus">
+		UPDATE fate_project
+		SET status = '执行中'
+		WHERE id = #{fateProjectId}
+	</update>
+
 </mapper>

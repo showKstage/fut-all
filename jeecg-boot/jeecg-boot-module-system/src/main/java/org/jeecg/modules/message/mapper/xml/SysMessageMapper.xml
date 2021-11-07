@@ -2,4 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.message.mapper.SysMessageMapper">
 
+    <!-- 根据企业名查询对用企业用户id -->
+    <select id="selectFirmIdByFirmName" resultType="string">
+        SELECT id FROM sys_user
+        WHERE username = #{cooperation}
+    </select>
+
+    <!-- 根据实体查询消息模版id -->
+    <select id="selectSmsIdByAnnouncement" resultType="string">
+        SELECT id FROM sys_announcement
+        WHERE titile = #{announcement.titile} AND start_time = #{announcement.startTime}
+            AND end_time = #{announcement.endTime} AND create_by = #{announcement.createBy}
+    </select>
+
+    <!-- 根据企业名称查询官网 -->
+    <select id="selectWebsiteByCreateBy" resultType="string">
+        SELECT official_website
+        FROM fate_client_firm
+        WHERE name = #{createBy}
+    </select>
+
+    <!-- 根据企业id查询企业名 -->
+    <select id="selectFirmNameById" resultType="string">
+        SELECT username
+        FROM sys_user
+        WHERE id = #{id}
+    </select>
+
 </mapper>

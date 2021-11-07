@@ -86,11 +86,61 @@ module.exports = {
           '/jeecg-boot': ''  //默认所有请求都加了jeecg-boot前缀，需要去掉
         }
       },*/
-      [process.env.VUE_APP_API_BASE_URL]: {
+      '/sys': {
         target: process.env.PROXY, //转发后台
         ws: true,
         changeOrigin: true
       },
+      '/online/cgform/api': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/online/cgform/head': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/online/cgform/field': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/online/cgform/index': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/online/cgreport/head': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/jmreport': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/actuator': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/mock': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/test': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      },
+      '/online/cgreport/api': {
+        target: process.env.PROXY, //转发后台
+        ws: true,
+        changeOrigin: true
+      }
     }
   },
 

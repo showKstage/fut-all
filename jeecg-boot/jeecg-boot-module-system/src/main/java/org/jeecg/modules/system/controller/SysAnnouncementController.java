@@ -20,6 +20,7 @@ import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.TokenUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.message.websocket.WebSocket;
+import org.jeecg.modules.system.entity.FateCooperation;
 import org.jeecg.modules.system.entity.SysAnnouncement;
 import org.jeecg.modules.system.entity.SysAnnouncementSend;
 import org.jeecg.modules.system.service.ISysAnnouncementSendService;
@@ -489,5 +490,36 @@ public class SysAnnouncementController {
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;
     }
+
+	/**
+	 * 同意合作
+	 */
+	@GetMapping("/cooperation/agree/{cooperationId}/{announcementId}")
+	public void cooperationAgree(@PathVariable("cooperationId")String cooperationId,
+								 @PathVariable("announcementId")String announcementId) {
+		if (!redisUtil.hasKey(cooperationId + "_" + announcementId)) {
+			/** 查询合作执行计划信息 */
+			FateCooperation cooperation = sysAnnouncementService.querySysCementById(cooperationId);
+			/** 合作执行计划人数-1 */
+			sysAnnouncementService.reduceAgreeCount(cooperation);
+			/** 当fate_cooperation表中待同意人数agree_count为0时插入合作执行计划信息 */
+			sysAnnouncementService.addFateProject(cooperation);
+			/** 消息触达 */
+			sysAnnouncementService.agreeFateCooperation(cooperation, announcementId);
+
+			// 防止同个接口被多次调用
+			redisUtil.hmset(cooperationId + "_" + announcementId,null);
+		}
+		return;
+	}
+
+//	/**
+//	 * 拒绝合作
+//	 */
+//	@GetMapping("/cooperation/disagree/")
+//	public void cooperationDisagree(@PathVariable("")) {
+//		// 消息触达
+//	}
+
 
 }

@@ -42,7 +42,7 @@
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="运营活动效果" total="78%">
+        <chart-card :loading="loading" title="联合模型质量" total="90%">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -75,23 +75,44 @@
             </div>
             <a-range-picker :style="{width: '256px'}" />
           </div>
-          <a-tab-pane loading="true" tab="销售额" key="1">
+          <a-tab-pane loading="true" tab="企业收益明细" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="销售额排行" :dataSource="barData"/>
+                <bar title="企业收益明细排行" :dataSource="barData"/>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
+              <rank-list title="多方交易企业收益展示" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
-          <a-tab-pane tab="销售趋势" key="2">
+          <a-tab-pane tab="联邦收益趋势" key="2">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="销售额趋势" :dataSource="barData"/>
+                <bar title="联邦收益趋势分析" :dataSource="lineData"/>
+<!--                <line-chart-multid title="联邦收益趋势分析" :fields="visitFields" :dataSource="visitInfo"></line-chart-multid>-->
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
+                <rank-list title="多方交易企业收益展示" :list="rankList"/>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+          <a-tab-pane tab="企业数据量" key="3">
+            <a-row>
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+                <bar title="企业数据量一览" :dataSource="lineData"/>
+              </a-col>
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+                <rank-list title="多方交易企业收益展示" :list="rankList"/>
+              </a-col>
+            </a-row>
+          </a-tab-pane>
+          <a-tab-pane tab="企业投入概览" key="4">
+            <a-row>
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+                <bar title="企业投入概览" :dataSource="lineData"/>
+              </a-col>
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+                <rank-list title="多方交易企业收益展示" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -151,10 +172,12 @@
   import { getLoginfo,getVisitInfo } from '@/api/api'
 
   const rankList = []
-  for (let i = 0; i < 7; i++) {
+  const list = ['总数据量(万)：','企业总成本(万)：','模型平均质量(%)','联邦输入(万)','联邦支出(万)','联邦模型质量(%)']
+  const spends = [3402327,360000,80,900000,20000,90]
+  for (let i = 0; i < 6; i++) {
     rankList.push({
-      name: '白鹭岛 ' + (i+1) + ' 号店',
-      total: 1234.56 - i * 100
+      name: list[i],
+      total: spends[i]
     })
   }
   const barData = []
@@ -164,6 +187,13 @@
       y: Math.floor(Math.random() * 1000) + 200
     })
   }
+  const lineData =[]
+    for (let i = 0; i < 12; i += 1) {
+      lineData.push({
+        x: `${i + 1}月`,
+        y: Math.floor(Math.random() * 1000) + 200
+      })
+    }
   export default {
     name: "IndexChart",
     components: {
@@ -185,8 +215,10 @@
         center: null,
         rankList,
         barData,
+        lineData,
         loginfo:{},
         visitFields:['ip','visit'],
+        visitFields1:['test','test1'],
         visitInfo:[],
         indicator: <a-icon type="loading" style="font-size: 24px" spin />
       }
