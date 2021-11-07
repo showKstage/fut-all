@@ -6,7 +6,7 @@
     <div class="copyright">
       Copyright
       <a-icon type="copyright"/>
-      2021 <span>AIFT PLATFORM 出品</span>
+      2021 <span>WE 出品</span>
     </div>
   </div>
 </template>
