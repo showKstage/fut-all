@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.jeecg.common.api.vo.Result;
@@ -15,19 +13,22 @@ import org.jeecg.modules.oss.entity.OSSFile;
 import org.jeecg.modules.oss.service.IOSSFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/sys/oss/file")
-@Api(tags="OSS上传文件")
 public class OSSFileController {
 
 	@Autowired
 	private IOSSFileService ossFileService;
 
-	@ApiOperation("oss列表")
 	@ResponseBody
 	@GetMapping("/list")
 	public Result<IPage<OSSFile>> queryPageList(OSSFile file,
@@ -42,7 +43,6 @@ public class OSSFileController {
 		return result;
 	}
 
-	@ApiOperation("上传oss")
 	@ResponseBody
 	@PostMapping("/upload")
 	//@RequiresRoles("admin")
@@ -59,7 +59,6 @@ public class OSSFileController {
 		return result;
 	}
 
-	@ApiOperation("删除oss")
 	@ResponseBody
 	@DeleteMapping("/delete")
 	public Result delete(@RequestParam(name = "id") String id) {
@@ -80,7 +79,6 @@ public class OSSFileController {
 	/**
 	 * 通过id查询.
 	 */
-	@ApiOperation("通过id查询")
 	@ResponseBody
 	@GetMapping("/queryById")
 	public Result<OSSFile> queryById(@RequestParam(name = "id") String id) {

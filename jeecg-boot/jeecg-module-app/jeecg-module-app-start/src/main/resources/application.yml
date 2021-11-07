@@ -1,8 +1,0 @@
-server:
-  port: 7002
-spring:
-  application:
-    name: jeecg-cloud-app
-# 需要时，启用profile
-#  profiles:
-#    active: @profile.name@
